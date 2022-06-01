@@ -1,0 +1,23 @@
+version: "3.9"
+services:
+  mongo:
+    image: mongo:latest
+    container_name: db
+    environment:
+      MONGO_HOST: localhost
+      MONGO_PORT: 27017
+      MONGO_INITDB_ROOT_USERNAME: alex
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    ports:
+      - 27017:27017
+    volumes:
+      - ../mongo_data:/data/db
+  go:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: webserver
+    ports: 
+      - 8000:8000
+
+

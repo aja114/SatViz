@@ -7,6 +7,7 @@ import (
   "strings"
   "context"
   "time"
+  "os"
   "go.mongodb.org/mongo-driver/bson"
   "go.mongodb.org/mongo-driver/mongo"
   "go.mongodb.org/mongo-driver/mongo/options"
@@ -33,13 +34,19 @@ func dataHandler(w http.ResponseWriter, r *http.Request){
   json.NewEncoder(w).Encode(data)
 }
 
-func getMongoCollection(collection string)([]bson.M){
-  client, err := mongo.NewClient(options.Client().ApplyURI("mongodb://alex:alex@db:27017"))
+func getMongoClient() *mongo.Client{
+  mongoURI := os.Getenv("MONGO_URI")
+  client, err := mongo.NewClient(options.Client().ApplyURI(mongoURI))
   if err != nil {
       log.Fatal(err)
   }
+  return client
+}
+
+func getMongoCollection(collection string)([]bson.M){
+  client := getMongoClient()
   ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-  err = client.Connect(ctx)
+  err := client.Connect(ctx)
   if err != nil {
       log.Fatal(err)
   }

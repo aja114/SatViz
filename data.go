@@ -1,6 +1,7 @@
 package main
 
 import (
+  "fmt"
   "log"
   "os"
   "time"
@@ -23,10 +24,10 @@ func getCollectionData(collection string)([]bson.M){
   client := getMongoClient()
   ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
   err := client.Connect(ctx)
+  defer client.Disconnect(ctx)
   if err != nil {
       log.Fatal(err)
   }
-  defer client.Disconnect(ctx)
 
   satDB := client.Database("sat")
   cursor, err := satDB.Collection(collection).Find(ctx, bson.M{})
@@ -39,3 +40,27 @@ func getCollectionData(collection string)([]bson.M){
   }
   return data
 }
+
+func updateCollection(collection string, data []interface{}) error{
+  client := getMongoClient()
+  ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+  if err := client.Connect(ctx); err != nil {
+    return err
+    log.Fatal(err)
+  }
+  defer client.Disconnect(ctx)
+  
+  satDB := client.Database("sat")
+  fmt.Printf("dropping collection %s... \n", collection)
+  if err := satDB.Collection(collection).Drop(ctx); err != nil {
+    log.Fatal(err)
+    return err
+  }
+  fmt.Printf("recreating collection %s... \n", collection)
+    _, err := satDB.Collection(collection).InsertMany(context.TODO(), data)
+  if err != nil {
+	 return err
+  }
+  return nil
+}
+

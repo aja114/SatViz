@@ -13,8 +13,6 @@ var loadData = function (svgEl) {
   ]
 
   Promise.all(geoPromises.concat(satPromises)).then(function (data) {
-    console.log(data);
-    
     ctx.currentSat = data[4].map(function (d) {
       s = satellite.twoline2satrec(d.line1, d.line2)
       return satellite.twoline2satrec(d.line1, d.line2)
@@ -22,24 +20,24 @@ var loadData = function (svgEl) {
 
     ctx.satMapping = {}
     ctx.satcat = data[5].map(function (d, i) {
-      l = d.LAUNCH !== null ? d3.timeFormat('%Y-%q')(d3.timeParse('%Y-%m-%d')(d.LAUNCH)) : null
-      dec = d.DECAY !== null ? d3.timeFormat('%Y-%q')(d3.timeParse('%Y-%m-%d')(d.DECAY)) : null
+      l = d.launch !== null ? d3.timeFormat('%Y-%q')(d3.timeParse('%Y-%m-%d')(d.launch)) : null
+      dec = d.decay !== null ? d3.timeFormat('%Y-%q')(d3.timeParse('%Y-%m-%d')(d.decay)) : null
       var sat = {
-        'id': d.NORAD_CAT_ID,
-        'object_id': d.OBJECT_ID,
-        'name': d.SATNAME,
-        'launch_date': d.LAUNCH,
+        'id': d.norad_cat_id,
+        'object_id': d.object_id,
+        'name': d.satname,
+        'launch_date': d.launch,
         'launch_quarter': l,
         'decay_date': dec,
-        'country': d.COUNTRY,
-        'apogee': d.APOGEE,
-        'inclination': d.INCLINATION,
-        'perigee': d.PERIGEE,
-        'period': d.PERIOD,
-        'launch_site': d.LAUNCH_SITE,
-        'object_type': d.OBJECT_TYPE
+        'country': d.country,
+        'apogee': d.apogee,
+        'inclination': d.inclination,
+        'perigee': d.perigee,
+        'period': d.period,
+        'launch_site': d.site,
+        'object_type': d.object_type
       }
-      ctx.satMapping[parseInt(d.NORAD_CAT_ID)] = i
+      ctx.satMapping[parseInt(d.norad_cat_id)] = i
       return sat
     })
     ctx.range = d3.extent(data[5], (d) => (d3.timeParse('%Y-%m-%d')(d.LAUNCH)))

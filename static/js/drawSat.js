@@ -156,7 +156,6 @@ var drawSatsChart = function() {
 var updateSatsMap = function(){
   currentSat = ctx.currentSat.filter(function(d){
       if(ctx.satMapping[parseInt(d.satnum)]===undefined){
-        console.log(parseInt(d.satnum));
         return false
       };
       return (ctx.range[0] <= d3.timeParse("%Y-%q")(ctx.satcat[ctx.satMapping[parseInt(d.satnum)]].launch_quarter))

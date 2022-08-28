@@ -1,4 +1,4 @@
-const initialSelection = [new Date(2010, 0, 01), new Date(2020, 9, 01)]
+const initialSelection = [new Date(2010, 0, 01), new Date(2022, 07, 01)]
 
 const GLYPH_SIZE = 30;
 const crossGen = d3.symbol().type(d3.symbolWye).size(GLYPH_SIZE);
@@ -142,18 +142,18 @@ var drawSatsChart = function() {
                   .extent([[ctx.margin, 0.5], [ctx.chart_w-ctx.margin, ctx.chart_h - 0.5]])
                   .on("end", function({selection}){
                       if(selection!==null){
-                          ctx.range = selection.map((d) => xScale.invert(d-ctx.margin));
+                          ctx.range = selection.map((d) => xScale.invert(d));
                           clearInfo();
                           updateSatsMap();
                       } else {
                           chartArea.call(brush.move, initialSelection.map(xScale));
                         };
                   });
-
   chartArea.call(brush).call(brush.move, initialSelection.map(xScale));
 }
 
 var updateSatsMap = function(){
+  console.log(ctx.range);
   currentSat = ctx.currentSat.filter(function(d){
       if(ctx.satMapping[parseInt(d.satnum)]===undefined){
         return false

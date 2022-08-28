@@ -172,7 +172,7 @@ func updateData() error{
   for i, v := range activeSat {
       activeSatItf[i] = v
   }
-  err := updateCollection("active_french", activeSatItf)
+  err = updateCollection("active_french", activeSatItf)
   if err != nil{
     return err
   }

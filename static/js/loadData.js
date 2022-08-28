@@ -20,15 +20,15 @@ var loadData = function (svgEl) {
 
     ctx.satMapping = {}
     ctx.satcat = data[5].map(function (d, i) {
-      l = d.launch !== null ? d3.timeFormat('%Y-%q')(d3.timeParse('%Y-%m-%d')(d.launch)) : null
-      dec = d.decay !== null ? d3.timeFormat('%Y-%q')(d3.timeParse('%Y-%m-%d')(d.decay)) : null
+      launch = d.launch !== "" ? d3.timeFormat('%Y-%q')(d3.timeParse('%Y-%m-%d')(d.launch)) : null
+      decay = d.decay !== "" ? d3.timeFormat('%Y-%q')(d3.timeParse('%Y-%m-%d')(d.decay)) : null
       var sat = {
         'id': d.norad_cat_id,
         'object_id': d.object_id,
         'name': d.satname,
         'launch_date': d.launch,
-        'launch_quarter': l,
-        'decay_date': dec,
+        'launch_quarter': launch,
+        'decay_date': decay,
         'country': d.country,
         'apogee': d.apogee,
         'inclination': d.inclination,
